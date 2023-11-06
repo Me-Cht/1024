@@ -33,35 +33,26 @@
 </template>
 
 <script>
-import {computed, onMounted, reactive, ref, toRefs} from "vue";
-import {recommendVideo} from "@/api/recommend";
+import {onMounted, ref} from "vue";
 
 export default {
+  data() {
+    return {
+      videoList: ['./tmp/video2.mp4', './tmp/video3.mp4'], // 添加更多视频路径
+      currentVideoIndex: 0,
+      isPlaying: false,
+      progressWidth: '0%',
+      currentTime: '0:00',
+      duration: '0:00',
+      speed: '正常',
+      showSpeedMenu: false,
+      draggingProgress: false,
+    };
+  },
     setup() {
       const videoPlayer = ref(null);
-      const state = reactive({
-        videoList: [], // 推荐视频的路径列表
-        currentVideoIndex: 0,
-        isPlaying: false,
-        progressWidth: '0%',
-        currentTime: '0:00',
-        duration: '0:00',
-        speed: '正常',
-        showSpeedMenu: false,
-        draggingProgress: false
-      });
 
-      const fetchRecommendedVideos = async () => {
-        try {
-          const response = await recommendVideo(); // 假设recommendVideo是一个异步函数
-          state.videoList = response.info.map(item => item.video) || [];
-          console.log(state.videoList)
-        } catch (error) {
-          console.error("获取推荐视频失败", error);
-        }
-      };
       onMounted(() => {
-        fetchRecommendedVideos()
         const handleSpacebar = (event) => {
           if (event.code === 'Space') {
             if (videoPlayer.value.paused) {
@@ -75,26 +66,26 @@ export default {
         };
 
         document.addEventListener('keydown', handleSpacebar);
+
         // 记得在卸载组件时移除事件监听器
         return () => {
           document.removeEventListener('keydown', handleSpacebar);
         };
       });
-      const videoSource = computed(() => {
-        console.log("return state.videoList[state.currentVideoIndex];\n:",state.videoList)
-        return state.videoList[state.currentVideoIndex];
-      });
 
-      //setup函数返回的对象中的属性和方法将可用于模板中
+      // setup 函数返回的对象中的属性和方法将可用于模板中
       return {
         videoPlayer,
-        videoSource,
-        ...toRefs(state),
+        // ... 其他响应式数据或方法
       };
     },
+    // ... 其他选项如 data, computed, methods 等
 
-
-
+  computed: {
+    videoSource() {
+      return this.videoList[this.currentVideoIndex];
+    },
+  },
   methods: {
     toggleVideo() {
       const video = this.$refs.videoPlayer;
@@ -108,12 +99,10 @@ export default {
     switchToNextVideo() {
       this.currentVideoIndex = (this.currentVideoIndex + 1) % this.videoList.length;
       this.isPlaying = false;
-
     },
     switchToPrevVideo(){
       this.currentVideoIndex = (this.currentVideoIndex -1 + this.videoList.length) % this.videoList.length;
       this.isPlaying = false;
-
     },
     handleMouseWheel(event) {
       const delta = Math.sign(event.deltaY);
@@ -198,10 +187,8 @@ export default {
 }
 
 .myVideo {
-  position: absolute;
-  top: 70px;
   width: 100%;
-  height: 95%;
+  height: 100%;
 }
 
 .menu {
@@ -276,25 +263,25 @@ export default {
 }
 .next-button, .prev-button {
   position: absolute;
-  width: 50px;
-  height: 50px;
+  width: 50px; /* Adjust according to your needs */
+  height: 50px; /* Adjust according to your needs */
   background-color: gray;
   color: white;
   border: none;
-  border-radius: 50%;
+  border-radius: 50%; /* This makes the button round */
   cursor: pointer;
   text-align: center;
-  line-height: 50px;
-  font-size: 20px;
-  right: 40px;
+  line-height: 50px; /* Adjust according to your height */
+  font-size: 20px; /* Adjust font size for the arrow */
+  right: 40px; /* Adjust the position if needed */
 }
 
 .next-button {
-  top: 50%;
+  top: 50%; /* Adjust the top position for the down arrow */
 }
 
 .prev-button {
-  top: 40%;
+  top: 40%; /* Adjust the top position for the up arrow */
 }
 
 .prev-button:hover, .next-button:hover {
@@ -307,8 +294,8 @@ export default {
   left: 50%;
   width: 10%;
   height: 10%;
-  background: url('../../assets/icons/播放.svg') center center no-repeat;
-  background-size: contain;
+  background: url('../../assets/icons/播放.svg') center center no-repeat; /* 替换为你的暂停图片的路径 */
+  background-size: contain; /* 根据需要调整背景图像的尺寸适应覆盖区域 */
   z-index: 1;
 }
 

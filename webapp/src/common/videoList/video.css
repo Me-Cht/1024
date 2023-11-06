@@ -1,168 +1,43 @@
-.video-container {
-    height: 100vh;
-    width: 100vw;
-    position: relative;
-    overflow: hidden;
+video::-webkit-media-controls {
 }
 
-.videoWrapper {
+.custom-controls {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
     width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-.myVideo {
-    position: absolute;
-    top: 70px;
-    width: 100%;
-    height: 93%;
-}
-
-.menu {
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.play-pause-button, .mute-button, .fullscreen-button {
     color: white;
-    display: flex;
-    justify-content: space-between;
-    padding: 8px;
-    font-size: 14px;
-    z-index: 2;
-}
-
-.play,
-.time,
-.progress-bar,
-.quick {
-    cursor: pointer;
-}
-
-.progress-bar {
-    width: 50%;
-    height: 8px;
-    background-color: #333;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-}
-
-.progress {
-    height: 100%;
-    background-color: white;
-    border-radius: 4px;
-}
-.dot {
-    position: absolute;
-    height: 10px;
-    width: 10px;
-    background-color: #ff5722;
-    border-radius: 50%;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-left: -3px; /* 将小圆点向左偏移5像素 */
-}
-.quick-list {
-    position: absolute;
-    bottom: 100%;
-    left: 0;
-    display: none;
-}
-
-.quick-list ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.quick-list li {
-    cursor: pointer;
-    padding: 8px;
-    transition: background-color 0.2s;
-}
-
-.quick-list li:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-.buttons {
-    position: absolute;
-    top: 40%;
-    right: 100px;
-    width: 70px;
-    height: 260px;
-    border-radius: 50px;
-    background-color: rgb(129, 128, 129);
-}
-
-.next-button, .prev-button {
-    width: 50px;
-    height: 50px;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    text-align: center;
-    line-height: 50px;
     font-size: 20px;
-    right: 40px;
-    margin: 10px;
-}
-
-.like img {
-    width: 40px;
-    height: 40px;
-    transition: transform 0.3s ease; /* 添加过渡效果 */
-}
-
-
-.like img:active {
-    transform: scale(1.2); /* 放大 */
-}
-.like:hover{
     cursor: pointer;
-    transform: scale(1.2); /* 放大 */
-
-}
-.like .likesNumber {
-    font-size: 18px;
-
-}
-.like .likesNumber:hover {
 }
 
-
-.prev-button:hover, .next-button:hover {
-    background-color: rgb(24, 23, 23);
-    transform: scale(1.4); /* 放大 */
-
+.video-progress {
+    flex: 1;
+    margin: 0 10px;
 }
-.like{
-    margin: 10px;
-    right: 40px;
-    width: 50px;
-    height: 50px;
-    background-color: gray;
-    color: white;
+
+.video-progress input[type="range"] {
+    width: 100%;
+    height: 10px;
+    background-color: #ccc;
     border: none;
+    border-radius: 5px;
+    outline: none;
+    appearance: none;
+}
+
+.video-progress input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #007bff;
     border-radius: 50%;
     cursor: pointer;
-    text-align: center;
-    line-height: 50px;
-    font-size: 40px;
 }
-
-.pause-overlay {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    width: 10%;
-    height: 10%;
-    background: url('../../assets/icons/播放.svg') center center no-repeat;
-    background-size: contain;
-    z-index: 1;
-}
-

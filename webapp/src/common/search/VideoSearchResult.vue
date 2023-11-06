@@ -1,61 +1,34 @@
 <template>
   <div class="video-gallery">
-    <div v-if="ResultVideo.length === 0" class="no-data" style="font-size: 30px">
-      抱歉，没有此类视频数据哦～
-    </div>
-    <div
-      v-else
-      v-for="video in videos"
-      :key="video.vid"
-      class="video-card-link"
-    >
-      <router-link :to="{ name: 'videodetail', params: { vid: video.vid } }">
-      <div class="video-card" @click="checkDetail(video.vid)">
-        <img :src="video.thumbnail" alt="视频缩略图" class="thumbnail" />
-        <div class="video-info">
-          <div class="video-title" v-html="video.highlight_subtitled"></div>
-          <div class="video-details">
-            <span class="likes">{{ video.likes}} ❤️</span>
-            <span class="likes">标题：：{{ video.subtitled }}</span>
-            <span class="upload-time">发布于：{{ formatUploadTime(video.upload_time) }}前</span>
-          </div>
+    <div v-for="video in videos" :key="video.vid" class="video-card">
+      <img :src="video.thumbnail" alt="视频缩略图" class="thumbnail" />
+      <div class="video-info">
+        <div class="video-title" v-html="video.highlight_subtitled"></div>
+        <div class="video-details">
+          <span class="likes">{{ video.likes }} ❤️</span>
+          <span class="upload-time">{{ formatUploadTime(video.upload_time) }}前</span>
         </div>
       </div>
-      </router-link>
     </div>
   </div>
 </template>
+
 <script>
-import {useRouter} from "vue-router";
-import {ref, watchEffect} from "vue";
+import {useRoute} from "vue-router";
 
 export default {
   name: "VideoSearchResult",
+  setup() {
+    const route = useRoute();
+    return {
+      videos: route.params.videos,
+    };
+  },
   props: {
     videos: {
       type: Array,
       required: true
     },
-  },
-
-  setup(props) {
-    const router = useRouter();
-    const ResultVideo = ref([])
-    watchEffect(() => {
-      console.log("videos prop has changed:", props.videos);
-      ResultVideo.value =props.videos
-    });
-    const checkDetail = (vid) => {
-      console.log("checkDetail方法被调用了");
-      router.push({
-        name: 'videodetail',
-        params: { vid:vid }
-      });
-    };
-    return {
-      ResultVideo,
-      checkDetail
-    }
   },
   methods: {
     formatUploadTime(timestamp) {
@@ -66,27 +39,21 @@ export default {
       const hours = Math.floor(diff / 3600000);
       return `${hours} 小时`;
     },
-
   },
 };
 </script>
 
 <style scoped>
 .video-gallery {
-  display: grid;
-  /* 设置为最多显示两列，当只有一个视频时会自动居中 */
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  /* 确保grid子项在整个可用空间中居中对齐 */
-  justify-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
   position: absolute;
-  width: 60%; /* 可以尝试设置为100%，确保占据全部父元素宽度 */
-  left: 50%; /* 将左边距设置为50% */
-  transform: translateX(-50%); /* 通过transform偏移来确保完全居中 */
+  width: 60%;
   top: 120px;
-  background-color: #f7f7f7;
+  left: 20%;
+  background-color: #f7f7f7; /* 更轻柔的背景颜色 */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 响应式布局 */
+  gap: 20px;
+  padding: 20px; /* 添加内边距 */
 }
 
 .video-card {

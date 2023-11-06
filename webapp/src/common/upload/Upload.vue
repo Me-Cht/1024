@@ -8,17 +8,11 @@
     <div class="upload-section">
 
       <div class="input-section">
-        <label for="video-title">视频标题：</label>
-        <input id="video-title" v-model="subtitled" placeholder="输入视频标题"/>
+        <input v-model="subtitled" placeholder="输入视频标题"/>
+        <input v-model="tagsInput" placeholder="输入标签，用逗号分隔"/>
+        <input v-model="uploaderId" placeholder="输入上传者ID"/>
 
-        <label for="video-tags">视频标签：</label>
-        <div class="tags-container">
-          <span v-for="tag in availableTags" :key="tag" class="tag" @click="addTag(tag)">{{ tag }}</span>
-        </div>
-        <input id="video-tags" v-model="tagsInput" placeholder="输入标签，用逗号分隔"/>
-        <div class="tags-preview">
-          当前标签: <span v-for="tag in tagsArray" :key="tag">{{ tag }}</span>
-        </div>
+      </div>
       <div class="progress-container" v-if="progress < 100">
         <div class="progress-bar" :style="{ width: progress + '%' }"></div>
       </div>
@@ -32,7 +26,6 @@
       </div>
     </div>
   </div>
-  </div>
 </template>
 
 <script>
@@ -45,13 +38,11 @@ export default {
   name: "Upload",
   data() {
     return {
-      progress: 0,
+      progress:0,
       file: null,
-      subtitled: "",     // 清空默认值
-      tagsInput: "",
-      tagsArray: [],
-      uploaderId: parseInt(localStorage.getItem('uid') || '0'), // 从 localStorage 中获取 uploaderId
-      availableTags: ['教育', '科技', '娱乐', '生活'], // 可选标签列表
+      subtitled: "1",     //   用户输入的标题
+      tagsInput: "1",     //    用户输入的标签（逗号分隔）
+      uploaderId: parseInt(localStorage.getItem('uid')),
 
     };
   },
@@ -81,12 +72,6 @@ export default {
           console.error('获取上传凭证出现错误:', error.message);
           console.error('详细错误:', error)
         });
-    },
-    addTag(tag) {
-      if (!this.tagsArray.includes(tag)) {
-        this.tagsArray.push(tag);
-        this.tagsInput = this.tagsArray.join(', ');
-      }
     },
     startUpload(token, key) {
       console.log("startUpload方法被调用了");
@@ -185,29 +170,7 @@ export default {
     flex-direction: column;
     gap: 10px;
     margin-bottom: 20px;
-    .tags-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-bottom: 10px;
-    }
 
-    .tag {
-      display: inline-block;
-      background: #e1e1e1;
-      padding: 5px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: #cacaca;
-      }
-    }
-
-    .tags-preview {
-      margin-bottom: 10px;
-    }
     input {
       padding: 8px 12px;
       border: 1px solid #ccc;
